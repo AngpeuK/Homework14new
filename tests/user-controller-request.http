@@ -1,0 +1,34 @@
+### Below are the available API endpoints with example curl commands
+
+# curl -X GET http://localhost:3000/users
+GET http://localhost:3000/users
+
+###
+
+# curl -X POST http://localhost:3000/users
+POST http://localhost:3000/users
+
+###
+
+# curl -X GET http://localhost:3000/users/:id
+GET http://localhost:3000/users/37
+
+###
+
+# curl -X DELETE http://localhost:3000/users/:id
+DELETE http://localhost:3000/users/37
+
+###
+
+### Checklist
+
+#1 Запрос всех пользователей
+#2 Пользователи отсутствуют Запрос всех пользователей
+#3 Создание пользователей
+#4 Получить пользователя по ID
+#5 Получить несуществующего пользователя по ID
+#6 Неверный формат ID например alphanumeric формат 'abc123'
+#7 Удаление пользователя по ID
+#8 Удаление несуществующего пользователя по ID
+
+###
