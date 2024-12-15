@@ -1,4 +1,4 @@
-### Below are the available API endpoints with example curl commands
+### Below are the available API endpoints with example curl commands...
 
 # curl -X GET http://localhost:3000/users
 GET http://localhost:3000/users
