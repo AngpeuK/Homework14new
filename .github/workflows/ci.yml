@@ -30,8 +30,8 @@ jobs:
           compose-file: ./docker-compose.yaml
           up-flags: -d
 
-      - name: Run empty array test
-        run: npx playwright test tests/empty-array.spec.ts
+      - name: Run homework 14 tests
+        run: npx playwright test tests/hw-14-1-create-n-users.test.ts hw-14-2-get-users-by-id.test.ts hw-14-3-delete-users.test.ts
 
-      - name: Run all other tests
-        run: npx playwright test tests/user-controller.test.ts
+      - name: Run lesson tests
+        run: npx playwright test tests/lesson-14-1-create-n-users.test.ts lesson-14-2-delete-n-users.test.ts lesson-14-3-delete-m-users-after-creating-n-users.test.ts
