@@ -4,26 +4,28 @@ import {StatusCodes} from "http-status-codes";
 
 let baseURL: string = 'http://localhost:3000/users'
 
-export class HomeworkApiClient {
-    static instance: HomeworkApiClient
-    static number: HomeworkApiClient
+export class HomeworkApiClient3 {
+    static instance3: HomeworkApiClient3
+    static number: HomeworkApiClient3
     private request: APIRequestContext
 
     private constructor(request: APIRequestContext) {
         this.request = request
     }
 
-    public static async getInstance(request: APIRequestContext): Promise<HomeworkApiClient> {
-        if (!HomeworkApiClient.instance) {
-            HomeworkApiClient.instance = new HomeworkApiClient(request)
+    public static async getInstance(request: APIRequestContext): Promise<HomeworkApiClient3> {
+        if (!HomeworkApiClient3.instance3) {
+            HomeworkApiClient3.instance3 = new HomeworkApiClient3(request)
 
         }
-        return HomeworkApiClient.instance
+        return HomeworkApiClient3.instance3
     }
 
     async createUsers(users: number): Promise<number> {
         for (let i = 0; i < users; i++) {
-            await this.request.post(baseURL)
+            let createUsers = await this.request.post(baseURL)
+            expect.soft(createUsers.status()).toBe(StatusCodes.CREATED)
+            console.log('createUsers status is: ', createUsers.statusText())
         }
         return users
     }
@@ -59,14 +61,6 @@ export class HomeworkApiClient {
             expect.soft(response.status()).toBe(StatusCodes.OK)
         }
     }
-
-    async checkAllUsersDeleted(): Promise<void> {
-        const response = await this.request.get(`${baseURL}`)
-        expect(response.status()).toBe(StatusCodes.OK)
-        const responseBody = await response.text()
-        expect(responseBody).toBe('[]');
-    }
-
 
     async getUserDataByIndex(index: number): Promise<any> {
         const response = await this.request.get(`${baseURL}`)
