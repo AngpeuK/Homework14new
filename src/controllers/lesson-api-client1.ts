@@ -4,25 +4,27 @@ import {StatusCodes} from "http-status-codes";
 
 let baseURL: string = 'http://localhost:3000/users'
 
-export class LessonApiClient {
-    static instance: LessonApiClient
+export class LessonApiClient1 {
+    static instance: LessonApiClient1
     private request: APIRequestContext
 
     private constructor(request: APIRequestContext) {
         this.request = request
     }
 
-    public static async getInstance(request: APIRequestContext): Promise<LessonApiClient> {
-        if (!LessonApiClient.instance) {
-            LessonApiClient.instance = new LessonApiClient(request)
+    public static async getInstance(request: APIRequestContext): Promise<LessonApiClient1> {
+        if (!LessonApiClient1.instance) {
+            LessonApiClient1.instance = new LessonApiClient1(request)
 
         }
-        return LessonApiClient.instance
+        return LessonApiClient1.instance
     }
 
     async createUsers(users: number): Promise<number> {
         for (let i = 0; i < users; i++) {
-            await this.request.post(baseURL)
+            let createUsers = await this.request.post(baseURL)
+            expect.soft(createUsers.status()).toBe(StatusCodes.CREATED)
+            console.log('createUsers status is: ', createUsers.statusText())
         }
         return users
     }
