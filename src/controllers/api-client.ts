@@ -1,29 +1,29 @@
 import {APIRequestContext} from 'playwright'
 import {expect} from "@playwright/test"
-import {StatusCodes} from "http-status-codes";
+import {StatusCodes} from "http-status-codes"
 
 let baseURL: string = 'http://localhost:3000/users'
 
-export class HomeworkApiClient {
-    static instance: HomeworkApiClient
-    static number: HomeworkApiClient
+export class ApiClient {
+    static instance: ApiClient
     private request: APIRequestContext
 
     private constructor(request: APIRequestContext) {
         this.request = request
     }
 
-    public static async getInstance(request: APIRequestContext): Promise<HomeworkApiClient> {
-        if (!HomeworkApiClient.instance) {
-            HomeworkApiClient.instance = new HomeworkApiClient(request)
+    public static async getInstance(instanceRequest: APIRequestContext): Promise<ApiClient> {
+        if (!ApiClient.instance) {
+            ApiClient.instance = new ApiClient(instanceRequest)
 
         }
-        return HomeworkApiClient.instance
+        return ApiClient.instance
     }
 
     async createUsers(users: number): Promise<number> {
         for (let i = 0; i < users; i++) {
-            await this.request.post(baseURL)
+            let createUsers = await this.request.post(baseURL)
+            expect.soft(createUsers.status()).toBe(StatusCodes.CREATED)
         }
         return users
     }
@@ -35,7 +35,7 @@ export class HomeworkApiClient {
         const usersToDelete = Math.min(count, numberOfObjects)
         let userIDs = []
         for (let i = 0; i < numberOfObjects; i++) {
-            let userID = responseBody[i].id;
+            let userID = responseBody[i].id
             userIDs.push(userID)
         }
         for (let i = 0; i < usersToDelete; i++) {
@@ -45,28 +45,27 @@ export class HomeworkApiClient {
         }
     }
 
-    async deleteAllUsers(): Promise<void> {
-        const response = await this.request.get(`${baseURL}`)
+    async deleteAllUsers(request: APIRequestContext): Promise<void> {
+        const response = await request.get(`${baseURL}`)
         const responseBody = await response.json()
         const numberOfObjects = responseBody.length
-        let userIDs = [];
+        let userIDs = []
+
         for (let i = 0; i < numberOfObjects; i++) {
             let userID = responseBody[i].id
-            userIDs.push(userID);
+            userIDs.push(userID)
         }
+
         for (let i = 0; i < numberOfObjects; i++) {
-            let response = await this.request.delete(`${baseURL}/${userIDs[i]}`)
+            let response = await request.delete(`${baseURL}/${userIDs[i]}`)
             expect.soft(response.status()).toBe(StatusCodes.OK)
         }
-    }
 
-    async checkAllUsersDeleted(): Promise<void> {
-        const response = await this.request.get(`${baseURL}`)
-        expect(response.status()).toBe(StatusCodes.OK)
-        const responseBody = await response.text()
-        expect(responseBody).toBe('[]');
+        const verifyResponse = await request.get(baseURL)
+        expect(verifyResponse.status()).toBe(StatusCodes.OK)
+        const verifyBody = await verifyResponse.text()
+        expect(verifyBody).toBe('[]')
     }
-
 
     async getUserDataByIndex(index: number): Promise<any> {
         const response = await this.request.get(`${baseURL}`)
